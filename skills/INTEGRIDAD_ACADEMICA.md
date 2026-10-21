@@ -30,9 +30,6 @@ Antes de publicar, la persona o entidad responsable debe comprobar qué obligaci
 
 ## Fuentes primarias
 
-- [ALLEA: Código Europeo de Conducta para la Integridad en la Investigación, edición 2023](https://allea.org/code-of-conduct/).
-- [Comisión Europea: actualización de las directrices sobre uso responsable de IA generativa en investigación](https://research-and-innovation.ec.europa.eu/news/all-research-and-innovation-news/updated-era-living-guidelines-responsible-use-generative-ai-research-2026-05-08_en).
-
 - [Ley de IA, Reglamento (UE) 2024/1689, texto consolidado en EUR-Lex](https://eur-lex.europa.eu/legal-content/ES/TXT/?uri=CELEX:02024R1689-20260727).
 - [Comisión Europea: alfabetización en IA y artículo 4](https://digital-strategy.ec.europa.eu/en/policies/ai-talent-skills-and-literacy).
 - [Comisión Europea: artículo 50, transparencia y revisión humana](https://digital-strategy.ec.europa.eu/en/faqs/transparency-obligations-under-article-50-ai-act).
