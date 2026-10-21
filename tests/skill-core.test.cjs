@@ -77,3 +77,18 @@ test('ZIP preserves binary bytes and includes one named top-level folder', () =>
   assert.equal(view.getUint32(pos, true), 0x02014b50);
   assert.throws(() => C.zip('../fuera', []));
 });
+
+test('every exported skill carries an academic integrity notice and its complete local reference', () => {
+  const files = C.files(guided());
+  const manifest = new TextDecoder().decode(files.find(f => f.path === 'SKILL.md').bytes);
+  assert.ok(manifest.includes('## Integridad académica y uso responsable de IA'));
+  const notice = new TextDecoder().decode(files.find(f => f.path === 'references/integridad-academica.md').bytes);
+  assert.ok(notice.includes('Artículo 4'));
+  assert.ok(notice.includes('Artículo 50.4'));
+  assert.ok(notice.includes('no constituye asesoramiento jurídico ni un certificado'));
+  const imported = { ...C.parse(manifest), mode: 'free', tests: [] };
+  const exported = C.markdown(imported);
+  assert.equal((exported.match(/## Integridad académica y uso responsable de IA/g) || []).length, 1);
+  const preserved = files.filter(f => f.path !== 'SKILL.md');
+  assert.equal(C.files(imported, preserved).filter(f => f.path === 'references/integridad-academica.md').length, 1);
+});

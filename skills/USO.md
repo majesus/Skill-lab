@@ -1,6 +1,6 @@
 # Skills bibliométricas de bibliolab
 
-Esta carpeta contiene `INTEGRIDAD_ACADEMICA.md`, que debe leerse primero, y cuatro skills instalables. `bibliometric-analysis-basic` y `bibliometric-analysis-advanced` trabajan con corpus bibliográficos; las otras dos son `bibliometria-paper` (redacción) y `bibliometria-review` (revisión). Cada skill incluye dentro de su carpeta las referencias y los scripts que necesita; la revisión y la redacción pueden instalarse por separado. La descarga de resultados de la aplicación las incluye.
+Esta carpeta contiene únicamente dos skills instalables: `bibliometria-paper` (redacción) y `bibliometria-review` (revisión). Cada una incluye su aviso de integridad académica en `SKILL.md` y el documento completo en `references/integridad-academica.md`, además de los recursos y scripts que necesita. Pueden instalarse por separado. Las skills de generación de análisis se conservan fuera de esta carpeta, en los materiales de prompts.
 
 **Instalación.** En Claude, Codex u otra herramienta con soporte de skills, copia las carpetas que necesites a la ubicación de skills o usa el mecanismo de instalación de esa herramienta. Si la interfaz no admite `SKILL.md`, adjunta los archivos de instrucciones y `references/` junto al ZIP de resultados y pide aplicarlos como contexto. No se asegura que todos los productos acepten el mismo formato.
 
@@ -12,4 +12,4 @@ Esta carpeta contiene `INTEGRIDAD_ACADEMICA.md`, que debe leerse primero, y cuat
 
 Las skills son instrucciones, no un servicio de IA: no envían datos ni publican. La autoría es humana y toda asistencia exige supervisión exhaustiva de texto, cifras, referencias e interpretaciones, y la declaración de uso de IA que exijan institución y revista. Una entrega con datos ficticios se etiqueta como ejercicio.
 
-Si utiliza documentos fuente llamados `SKILL_basic.md` o `SKILL_advanced.md`, recuerde que no son carpetas instalables. Para instalar, use las carpetas de esta colección, cuyo nombre coincide con el campo `name` y que contienen `SKILL.md`. Las instrucciones no se instalan ni se ejecutan por abrir un editor HTML.
+El aviso aborda alfabetización y transparencia en el marco de los artículos 4 y 50 de la Ley de IA de la UE según su aplicación al uso concreto. No certifica el cumplimiento legal ni sustituye las políticas de la institución o revista.

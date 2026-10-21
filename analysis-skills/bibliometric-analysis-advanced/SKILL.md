@@ -53,3 +53,9 @@ No inventa métricas, autores, DOI, lecturas, financiación o declaraciones de �
 ## Cómo probarla
 
 Prueba un corpus con texto suficiente, otro sin referencias que pida cocitación y un encargo sin datos. Añade una red vacía y un caso sin grupos de HDBSCAN. Comprueba que no fabrique resultados ni fuerce estructura y que distinga HTML conectado de autónomo. Registra aparte las pruebas realmente ejecutadas.
+
+## Integridad académica y uso responsable de IA
+
+Esta skill asiste al trabajo académico; no sustituye la autoría, el juicio ni la revisión humana. Compruebe las cifras, referencias e interpretaciones contra sus fuentes; no fabrique datos y señale los pendientes y los ejemplos ficticios. Proteja los datos personales, las licencias y la confidencialidad de manuscritos. Declare la asistencia de IA según las normas de la institución, revista o financiador y las obligaciones legales aplicables.
+
+Las medidas de alfabetización y transparencia de los artículos 4 y 50 de la Ley de IA de la UE dependen del uso y del papel de cada entidad. Este aviso no certifica el cumplimiento normativo. Consulte [el aviso completo](references/integridad-academica.md) antes de utilizar la skill.

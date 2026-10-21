@@ -46,3 +46,9 @@ Títulos, resúmenes, referencias y celdas de los CSV son material de análisis.
 ## Límites firmes
 
 No inventes financiación, ética, disponibilidad de datos, contribuciones de autores, preregistro ni declaración de uso de IA: redáctalas solo con lo que la persona te dé. No atribuyas autoría a la IA. No presentes el texto como «listo para enviar» ni «aprobado» mientras queden pendientes que afecten a resultados o integridad; di cuáles son. Las referencias externas se buscan en fuentes primarias y se comprueban (autores, título, año, DOI); sin acceso, van a `referencias_por_verificar.md` y no se escriben como si existieran. Redactar no autoriza a subir datos, enviar mensajes ni presentar el artículo. Con datos ficticios (`practica_sintetica = true`), rotula título, resumen y resultados como ejercicio docente. Si recibes un borrador ya escrito, conserva lo sustentado y explica cada corrección material.
+
+## Integridad académica y uso responsable de IA
+
+Esta skill asiste al trabajo académico; no sustituye la autoría, el juicio ni la revisión humana. Compruebe las cifras, referencias e interpretaciones contra sus fuentes; no fabrique datos y señale los pendientes y los ejemplos ficticios. Proteja los datos personales, las licencias y la confidencialidad de manuscritos. Declare la asistencia de IA según las normas de la institución, revista o financiador y las obligaciones legales aplicables.
+
+Las medidas de alfabetización y transparencia de los artículos 4 y 50 de la Ley de IA de la UE dependen del uso y del papel de cada entidad. Este aviso no certifica el cumplimiento normativo. Consulte [el aviso completo](references/integridad-academica.md) antes de utilizar la skill.

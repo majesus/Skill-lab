@@ -72,6 +72,7 @@
     $('description-count').textContent = Array.from(state.description).length + ' / 1024';
     $('folder-hint').textContent = (state.name.trim() || 'mi-skill') + '/SKILL.md';
     const paths = ['SKILL.md', ...resources.map(r => r.path), ...pendingResources.map(p => p + ' [pendiente]')];
+    if (!resources.some(r => r.path === 'references/integridad-academica.md') && !pendingResources.includes('references/integridad-academica.md')) paths.push('references/integridad-academica.md');
     if (C.hasTests(state)) paths.push('references/pruebas-skill-lab.md');
     $('tree').textContent = (state.name.trim() || 'mi-skill') + '/\n' + paths.map((p, i) => (i === paths.length - 1 ? '└── ' : '├── ') + p).join('\n');
     $('structure-status').textContent = check.errors.length ? 'Borrador · ' + check.errors.length + ' pendiente(s)' : 'Estructura comprobada';

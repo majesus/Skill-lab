@@ -1,8 +1,8 @@
 /* Skill Lab · formato, validación y ZIP. Sin conexiones ni ejecución de recursos. */
 (function (root, factory) {
-  if (typeof module === 'object' && module.exports) module.exports = factory(require('./vendor/js-yaml.min.js'));
-  else root.SkillCore = factory(root.jsyaml);
-})(typeof globalThis !== 'undefined' ? globalThis : this, function (yaml) {
+  if (typeof module === 'object' && module.exports) module.exports = factory(require('./vendor/js-yaml.min.js'), require('./skill-integrity.js'));
+  else root.SkillCore = factory(root.jsyaml, root.SkillIntegrity);
+})(typeof globalThis !== 'undefined' ? globalThis : this, function (yaml, integrity) {
   'use strict';
   const sections = [
     ['task', 'Tarea'], ['when', 'Cuándo se usa'], ['needs', 'Qué necesita'],
@@ -55,11 +55,12 @@
         (t.observed || '(sin observación registrada)')).join('\n\n') + '\n';
   }
   function hasTests(state) { return (state.tests || []).some(t => t.prompt || t.expected || t.observed || t.status !== 'Sin probar'); }
+  function withIntegrity(text) { return text.includes(integrity.notice.trim()) ? text : text + '\n\n' + integrity.notice.trim(); }
   function markdown(state) {
     const meta = { name: state.name.trim(), description: state.description.trim(), ...(state.extras || {}) };
     // Imported metadata cannot override the two fields edited in the form.
     meta.name = state.name.trim(); meta.description = state.description.trim();
-    let content = body(state);
+    let content = withIntegrity(body(state));
     if (hasTests(state)) content += '\n\n## Pruebas de uso\n\nPara probar esta skill, consulte [references/pruebas-skill-lab.md](references/pruebas-skill-lab.md). Las pruebas son un plan; revise allí su estado real.';
     return '---\n' + yaml.dump(meta, { lineWidth: -1, noRefs: true, quotingType: '"', forceQuotes: true, schema: yaml.CORE_SCHEMA }).trimEnd() + '\n---\n\n' + content + '\n';
   }
@@ -86,12 +87,13 @@
     if (size(desc) > 200) warnings.push('La descripción supera unos 200 caracteres: revise si puede acortarla. Es una pauta del taller; el máximo técnico es 1024.');
     if (state.mode === 'guided') sections.forEach(([key, title]) => { if (!(state[key] || '').trim()) errors.push('Complete «' + title + '» en el recorrido guiado.'); });
     else if (!state.body.trim()) errors.push('Las instrucciones están vacías.');
-    const content = body(state);
+    const content = withIntegrity(body(state));
     if (content.split('\n').length >= 500) warnings.push('El cuerpo alcanza 500 líneas. Considere trasladar el detalle a references/.');
     if (/\[TODO\b|\[PENDIENTE\]|\[ESCRIBIR\]/i.test(content)) warnings.push('Hay marcadores de borrador en las instrucciones. Revise si deben completarse antes de usar la skill.');
     const names = new Set(); let bytes = 0;
     for (const r of resources) {
       if (!validPath(r.path)) errors.push('Ruta de recurso no válida: ' + r.path);
+      if (r.path.toLowerCase() === 'references/integridad-academica.md' && r.path !== 'references/integridad-academica.md') errors.push('Use la ruta exacta references/integridad-academica.md para el aviso de integridad.');
       if (r.path.toLowerCase() === 'skill.md') errors.push('SKILL.md se genera desde el editor; no se puede añadir como recurso.');
       if (names.has(r.path.toLowerCase())) errors.push('Recurso duplicado: ' + r.path);
       names.add(r.path.toLowerCase()); bytes += r.bytes.length;
@@ -100,7 +102,7 @@
     if (resources.length > 100 || bytes > 20 * 1024 * 1024) errors.push('Use hasta 100 recursos y 20 MB en total en este editor.');
     const tests = hasTests(state);
     if (tests && names.has('references/pruebas-skill-lab.md')) errors.push('El nombre references/pruebas-skill-lab.md está reservado para las pruebas del editor. Renombre su recurso.');
-    const allPaths = new Set(['SKILL.md', ...resources.map(r => r.path), ...(tests ? ['references/pruebas-skill-lab.md'] : [])]);
+    const allPaths = new Set(['SKILL.md', 'references/integridad-academica.md', ...resources.map(r => r.path), ...(tests ? ['references/pruebas-skill-lab.md'] : [])]);
     localLinks(content).forEach(path => {
       if (path !== 'SKILL.md' && !validPath(path)) errors.push('El enlace debe apuntar dentro de esta skill: ' + path);
       else if (!allPaths.has(path)) errors.push('Falta el archivo enlazado: ' + path + '. Añádalo en Recursos o corrija el enlace.');
@@ -116,6 +118,7 @@
     const check = validate(state, resources);
     if (check.errors.length) throw Error(check.errors.join('\n'));
     const list = [{ path: 'SKILL.md', bytes: encoder.encode(markdown(state)) }, ...resources];
+    if (!resources.some(r => r.path === 'references/integridad-academica.md')) list.push({ path: 'references/integridad-academica.md', bytes: encoder.encode(integrity.reference) });
     if (hasTests(state)) list.push({ path: 'references/pruebas-skill-lab.md', bytes: encoder.encode(testFile(state.tests)) });
     return list;
   }

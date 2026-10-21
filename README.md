@@ -23,6 +23,7 @@ El editor prepara archivos: **no instala la skill, no la ejecuta ni llama a un m
 - Importar un `SKILL.md`, una carpeta de skill o un proyecto guardado. El Markdown importado se abre en edición libre para conservar su contenido completo y los campos adicionales de su cabecera.
 - Añadir documentos en `references/`, scripts en `scripts/` y plantillas u otros recursos en `assets/`. Los recursos importados se conservan como archivos: no se ejecutan.
 - Registrar tres pruebas —caso normal, información incompleta y fuera de propósito— con comportamiento esperado, estado y observaciones. Si se rellenan, se incluyen en `references/pruebas-skill-lab.md`.
+- Incluir en cada skill un aviso de integridad académica dentro de `SKILL.md` y un documento completo en `references/integridad-academica.md`, con responsabilidad humana, verificación, confidencialidad y marco de aplicación de la Ley de IA de la UE.
 - Descargar un ZIP, descargar solo `SKILL.md`, copiar el texto o **Guardar proyecto** con todos sus recursos y pruebas para continuar después.
 
 **Crear carpeta en mi equipo** está disponible cuando el navegador ofrece la API de acceso a carpetas, normalmente en Chrome o Edge y en un contexto seguro. El navegador pide elegir el destino; el editor crea una subcarpeta nueva y rechaza sobrescribir una existente. Si la opción está deshabilitada, descargue el ZIP y extráigalo: obtendrá la misma estructura. Esta alternativa también funciona abriendo el HTML como archivo local.
@@ -47,14 +48,14 @@ Para borrar el borrador visible y guardado, pulse **Empezar en blanco**. Conserv
 
 ## Skills revisadas incluidas
 
-Las carpetas de `skills/` se pueden utilizar por separado:
+La carpeta `skills/` contiene únicamente las skills de redacción y revisión. Las de generación de análisis se conservan aparte, en `analysis-skills/`, como ejemplos docentes. Cada carpeta de skill puede utilizarse por separado:
 
 | Carpeta | Para qué sirve |
 | --- | --- |
-| `bibliometric-analysis-basic` | Análisis modular de un corpus bibliográfico: descriptivos, citas, colaboración, redes y texto. |
-| `bibliometric-analysis-advanced` | Modelos multivariantes, mapas, sensibilidad y visualización de datos aportados. |
-| `bibliometria-paper` | Redacción a partir de una entrega ya calculada de bibliolab, con cifras y pendientes trazables. |
-| `bibliometria-review` | Revisión de un borrador contra su evidencia, distinguiendo errores demostrados, riesgos y cuestiones abiertas. |
+| `skills/bibliometria-paper` | Redacción a partir de una entrega ya calculada de bibliolab, con cifras y pendientes trazables. |
+| `skills/bibliometria-review` | Revisión de un borrador contra su evidencia, distinguiendo errores demostrados, riesgos y cuestiones abiertas. |
+| `analysis-skills/bibliometric-analysis-basic` | Ejemplo separado: análisis modular de un corpus bibliográfico. |
+| `analysis-skills/bibliometric-analysis-advanced` | Ejemplo separado: modelos multivariantes, mapas, sensibilidad y visualización. |
 
 Las dos skills de análisis tienen nombres distintos y metadatos compatibles con el formato. Sus instrucciones ya no exigen una entrevista redundante si el encargo está definido, ni prometen equivalencia exacta entre R y Python o aceptación editorial. Distinguen citas ausentes de cero, normalización por cohorte de normalización por campo, ACP/AC/ACM y visualización 2D de agrupación. También distinguen HTML con CDN de una entrega que funciona sin conexión.
 
@@ -62,9 +63,11 @@ Redacción y revisión incluyen en su propia carpeta los recursos de integridad,
 
 La revisión de las skills fue estructural, metodológica y de sus herramientas de comprobación. **No se ha ejecutado un estudio bibliométrico completo en R y Python ni se ha certificado su comportamiento en todas las plataformas.** Las pruebas de cada skill deben completarse con el modelo y el entorno de destino. Consulte `skills/USO.md` para el uso con bibliolab.
 
+Todas las skills incluidas y las exportadas por el editor incorporan un aviso de integridad. El documento común distingue normas académicas de obligaciones legales: el artículo 4 contempla medidas de alfabetización según el contexto; el artículo 50.4 regula determinados textos publicados para informar al público sobre asuntos de interés público y contempla una excepción con revisión humana o control editorial y responsabilidad editorial. La revisión meramente ortográfica no basta. Una excepción legal al etiquetado no elimina una declaración de IA exigida por la institución o la revista. **Incluir un aviso no acredita ni certifica el cumplimiento de la Ley de IA.** Consulte las fuentes oficiales del documento antes de aplicar sus criterios al caso concreto.
+
 ## Archivos y mantenimiento
 
-`index.html`, `skill-lab.css`, `skill-lab.js`, `skill-core.js`, `skill-examples.js` y `vendor/` forman el editor. `SKILLS_bibliometria_v2.html` conserva las diapositivas de referencia del taller. `skills/` contiene las carpetas instalables. El ZIP generado para una skill incluye únicamente su archivo, recursos y pruebas; no incluye el editor ni las diapositivas.
+`index.html`, `skill-lab.css`, `skill-lab.js`, `skill-core.js`, `skill-integrity.js`, `skill-examples.js` y `vendor/` forman el editor. `SKILLS_bibliometria_v2.html` conserva las diapositivas de referencia del taller. `skills/` contiene solo redacción y revisión; `analysis-skills/` mantiene aparte los ejemplos de análisis. El ZIP generado para una skill incluye únicamente su archivo, recursos, aviso de integridad y pruebas; no incluye el editor ni las diapositivas.
 
 Las pruebas de mantenimiento no necesitan instalar paquetes:
 
