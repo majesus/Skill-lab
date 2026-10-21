@@ -40,6 +40,19 @@ El corpus, su fuente y fecha de extracción, la pregunta y el alcance solicitado
 
 Por módulo solicitado: tabla completa con identificadores, script reproducible y lectura con método, resultados y límites. Si se pide Markdown, incluye fuente, fecha de extracción, N, entorno ejecutado y pendientes. Los CSV y el registro de selección sostienen los números; un ranking recortado no basta. No llama «verificado» a un cálculo por haber escrito su código.
 
+### Informe HTML interactivo · Classic Swiss Design
+
+Entrega también, salvo que el usuario limite expresamente los formatos, un informe `informe_bibliometrico.html` que se abra directamente en el navegador, sin instalar programas ni iniciar un servidor. Mantiene los CSV, scripts y registros como entregables complementarios; el informe enlaza solo archivos realmente creados mediante rutas relativas.
+
+- **Diseño.** Aplica diseño suizo clásico: retícula clara, alineación a la izquierda, tipografía sans serif de sistema, jerarquía tipográfica marcada, espacio en blanco, fondo blanco o marfil, texto negro y rojo como acento. Usa etiquetas y valores junto al color. Evita adornos que distraigan y adapta la composición a móvil e impresión.
+- **Contenido.** Incluye pregunta y alcance, fuente y fecha de extracción, N inicial y final, selección y exclusiones, módulos ejecutados, resultados, método, parámetros, limitaciones y pendientes. Identifica qué resultados están verificados y cuáles no se ejecutaron. No añade módulos ni indicadores solo para llenar el panel.
+- **Interacción útil.** Ofrece búsqueda y ordenación en las tablas y filtros por campos disponibles, como año, fuente o tipo documental. Muestra el número de registros visibles y permite restablecer filtros. En gráficos, ofrece valores consultables y una tabla equivalente; incorpora navegación por secciones y opción de imprimir. Implementa solo controles pertinentes y operativos, utilizables con teclado y con etiquetas comprensibles.
+- **Coherencia.** Todas las cifras y visualizaciones proceden de las tablas calculadas. Indica si un indicador resume el corpus completo o la selección visible; si debe cambiar con los filtros, recalcúlalo con el mismo método y denominador. No mezcla totales globales con subconjuntos sin identificarlos. Explica rankings recortados y permite consultar sus tablas completas.
+- **Funcionamiento local.** Integra estilos, datos necesarios y código en el HTML, sin depender de CDN, fuentes remotas, llamadas a servicios ni carga de CSV mediante `fetch`. Para recursos voluminosos que justifiquen archivos auxiliares, entrega la carpeta completa y comprueba su apertura local. Incorpora únicamente datos autorizados para el informe; no añade textos completos ni datos personales innecesarios.
+- **Comprobación.** Abre el HTML en un navegador y contrasta los totales con los CSV; prueba búsqueda, ordenación, filtros, restablecimiento, estados sin resultados, enlaces, lectura en móvil e impresión. Si el entorno no permite comprobarlo, declara qué verificaciones quedan pendientes. No presenta controles dibujados ni una previsualización como prueba de funcionamiento.
+
+Incluye en el informe un aviso visible de integridad académica: asistencia de IA, revisión humana de cifras y referencias, prohibición de fabricar resultados y declaración del uso según las normas aplicables. El aviso no certifica cumplimiento legal. Conserva el apartado de integridad y su referencia completa en esta skill.
+
 ## Qué no debe hacer
 
 - Inventar cifras, autores, DOI, búsquedas, filtros, financiación o referencias. Separa evidencia del corpus de fuentes metodológicas externas realmente consultadas.
