@@ -8,15 +8,17 @@ Editor local para convertir una tarea que se repite en una skill clara, comproba
 
 1. [Descargue el ZIP](https://github.com/majesus/Skill-lab/archive/refs/heads/main.zip) y extráigalo en su equipo.
 2. Abra **`index.html`** con un navegador actualizado.
-3. Empiece en blanco o pulse **Cargar ejemplo**. Hay un ejemplo guiado de lectura de indicadores y cuatro skills bibliométricas revisadas.
-4. Recorra **Identificar → Escribir → Probar y llevar**.
-5. Resuelva los pendientes y pulse **Descargar carpeta ZIP**. Dentro encontrará `nombre-de-la-skill/SKILL.md` y los recursos añadidos.
-6. Instale o adjunte la skill siguiendo las instrucciones del asistente que vaya a utilizar. Pruebe su comportamiento con datos adecuados antes de usarla en un trabajo.
+3. Si aún no sabe si necesita una skill, complete el **test previo «¿Prompt puntual o skill?»**: escriba una tarea y responda a seis preguntas. Puede elegir un ejemplo y ver sus respuestas orientativas.
+4. Empiece en blanco o pulse **Cargar ejemplo**. Hay un ejemplo guiado de lectura de indicadores y cuatro skills bibliométricas revisadas.
+5. Recorra **Identificar → Escribir → Probar y llevar**.
+6. Resuelva los pendientes y pulse **Descargar carpeta ZIP**. Dentro encontrará `nombre-de-la-skill/SKILL.md` y los recursos añadidos.
+7. Instale o adjunte la skill siguiendo las instrucciones del asistente que vaya a utilizar. Pruebe su comportamiento con datos adecuados antes de usarla en un trabajo.
 
 El editor prepara archivos: **no instala la skill, no la ejecuta ni llama a un modelo de IA**. Pegar las instrucciones en un chat sirve para probar su utilidad; para probar la selección automática hay que instalar la skill en un producto que la admita.
 
 ## Qué permite hacer
 
+- Valorar si una tarea merece una skill, necesita acotarse o puede resolverse con un prompt puntual, con motivos y un requisito independiente de uso autorizado y revisión crítica.
 - Editar **name** y **description** con ayudas, contadores y ajuste del nombre.
 - Redactar **Tarea, Cuándo se usa, Qué necesita, Qué hace, Qué entrega y Qué no debe hacer**.
 - Ver el Markdown y la estructura de carpetas mientras escribe.
@@ -37,6 +39,8 @@ La descripción debe explicar qué hace la skill y cuándo usarla. El máximo t�
 Solo `name` y `description` son obligatorios en la cabecera básica. El editor conserva otros campos al importar, avisa de posibles incompatibilidades y comprueba los enlaces locales del cuerpo para detectar recursos que falten. En la edición guiada pide completar las seis partes; la edición libre admite otras estructuras. Una comprobación estructural correcta **no demuestra que el asistente vaya a seleccionar la skill ni que sus resultados sean correctos**.
 
 Los límites prácticos del editor son 100 recursos y 20 MB de recursos por proyecto. No son límites universales del formato. La carga de archivos adjuntos, scripts, herramientas y campos específicos depende del producto de destino.
+
+El test previo adapta el ejercicio de las diapositivas: entre las primeras cinco preguntas, 4–5 respuestas afirmativas orientan hacia una skill; 2–3, a acotar la tarea; 0–1, a un prompt. La sexta pregunta es un requisito independiente sobre uso autorizado y revisión crítica. No se presenta un resultado hasta que constan una tarea y las seis respuestas. Estos umbrales son docentes, no una regla del formato ni una certificación. El test no bloquea el editor. Si recomienda una skill, permite copiar la tarea al borrador guiado cuando ese campo está vacío, conservando cualquier trabajo previo. Las respuestas se guardan con el borrador y con el proyecto JSON.
 
 ## Guardado y privacidad
 
@@ -67,12 +71,12 @@ Todas las skills incluidas y las exportadas por el editor incorporan un aviso de
 
 ## Archivos y mantenimiento
 
-`index.html`, `skill-lab.css`, `skill-lab.js`, `skill-core.js`, `skill-integrity.js`, `skill-examples.js` y `vendor/` forman el editor. `SKILLS_bibliometria_v2.html` conserva las diapositivas de referencia del taller. `skills/` contiene solo redacción y revisión; `analysis-skills/` mantiene aparte los ejemplos de análisis. El ZIP generado para una skill incluye únicamente su archivo, recursos, aviso de integridad y pruebas; no incluye el editor ni las diapositivas.
+`index.html`, `skill-lab.css`, `skill-lab.js`, `skill-core.js`, `skill-fit.js`, `skill-integrity.js`, `skill-examples.js` y `vendor/` forman el editor. `SKILLS_bibliometria_v2.html` conserva las diapositivas de referencia del taller. `skills/` contiene solo redacción y revisión; `analysis-skills/` mantiene aparte los ejemplos de análisis. El ZIP generado para una skill incluye únicamente su archivo, recursos, aviso de integridad y pruebas; no incluye el editor ni las diapositivas.
 
 Las pruebas de mantenimiento no necesitan instalar paquetes:
 
 ```sh
-node --test tests/skill-core.test.cjs
+node --test tests/skill-core.test.cjs tests/skill-fit.test.cjs
 python tests/test_evidence.py
 ```
 

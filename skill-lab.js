@@ -1,10 +1,11 @@
 (function () {
   'use strict';
-  const C = window.SkillCore, $ = id => document.getElementById(id), KEY = 'skill-lab-draft-v1';
+  const C = window.SkillCore, F = window.SkillFit, $ = id => document.getElementById(id), KEY = 'skill-lab-draft-v1';
   const textFields = ['name', 'description', 'title', ...C.sections.map(x => x[0])];
   const blankTests = () => Array.from({ length: 3 }, () => ({ prompt: '', expected: '', observed: '', status: 'Sin probar' }));
   const blank = () => ({ ...Object.fromEntries(textFields.map(x => [x, ''])), body: '', mode: 'guided', extras: {}, tests: blankTests() });
   let state = blank(), resources = [], pendingResources = [], currentStep = 1, toastTimer, restored = false;
+  let fit = F.initial();
   const encoder = new TextEncoder();
   function toast(message) { $('toast').textContent = message; $('toast').hidden = false; clearTimeout(toastTimer); toastTimer = setTimeout(() => { $('toast').hidden = true; }, 7000); }
   function hasContent() { return textFields.some(k => state[k].trim()) || state.body.trim() || resources.length || pendingResources.length; }
@@ -21,7 +22,7 @@
   }
   function saveDraft() {
     try {
-      localStorage.setItem(KEY, JSON.stringify({ version: 1, state, pendingResources: [...new Set([...resources.map(r => r.path), ...pendingResources])] }));
+      localStorage.setItem(KEY, JSON.stringify({ version: 1, state, fit, pendingResources: [...new Set([...resources.map(r => r.path), ...pendingResources])] }));
       $('draft-status').textContent = (restored ? 'Borrador restaurado. ' : '') + 'Texto guardado en este navegador' + (resources.length || pendingResources.length ? '; guarde el proyecto para conservar los recursos.' : '.');
     } catch { $('draft-status').textContent = 'El navegador no permite guardar el borrador. Use «Guardar proyecto» para conservarlo.'; }
   }
@@ -48,7 +49,24 @@
     $('mode-label').textContent = state.mode === 'guided' ? 'Recorrido guiado' : 'Edición libre · cuerpo completo';
     $('mode-btn').textContent = state.mode === 'guided' ? 'Usar edición libre' : 'Volver al recorrido guiado';
     state.tests.forEach((t, i) => Object.keys(t).forEach(k => { $('test-' + i + '-' + k).value = t[k]; }));
-    render();
+    renderFit(); render();
+  }
+  function renderFit() {
+    if ($('fit-task').value !== fit.task) $('fit-task').value = fit.task;
+    $('fit-example-select').value = fit.selection;
+    F.questions.forEach((_, i) => document.querySelectorAll('input[name="fit-' + i + '"]').forEach(r => { r.checked = r.value === fit.answers[i]; }));
+    const result = F.evaluate(fit);
+    $('fit-progress').textContent = result.answered + ' de 6 respondidas';
+    $('fit-score').textContent = result.ready ? result.score + ' DE 5 CRITERIOS · REQUISITO ' + (fit.answers[5] === 'yes' ? 'SÍ' : 'POR REVISAR') : 'SIN RESULTADO TODAVÍA';
+    $('fit-result-title').textContent = result.title; $('fit-result-summary').textContent = result.summary;
+    document.querySelector('.fit-result').dataset.result = result.type;
+    $('fit-result-reasons').replaceChildren();
+    result.reasons.forEach(reason => { const li = document.createElement('li'); li.textContent = reason; $('fit-result-reasons').append(li); });
+    $('fit-next-btn').disabled = !result.ready;
+    $('fit-next-btn').textContent = ({ skill: 'Diseñar esta skill →', narrow: 'Acotar mi tarea ↑', prompt: 'Revisar mi tarea ↑', review: 'Revisar el requisito ↑', pending: 'Complete la tarea y las respuestas' })[result.type];
+    $('fit-solve-btn').disabled = !fit.selection;
+    $('fit-example-note').hidden = !fit.example;
+    $('fit-example-note').textContent = fit.example && F.examples[fit.selection] ? 'Respuestas de ejemplo; revíselas para su caso. ' + F.examples[fit.selection].note : '';
   }
   function renderResources() {
     const ul = $('resource-list'); ul.replaceChildren();
@@ -123,7 +141,7 @@
   $('free-body').addEventListener('input', () => { state.body = $('free-body').value; render(); });
   $('normalize-btn').addEventListener('click', () => { state.name = C.slug(state.name); fill(); toast('Nombre ajustado; revise que describa la tarea.'); });
   $('mode-btn').addEventListener('click', () => { try { if (state.mode === 'guided') { state.body = C.body(state); state.mode = 'free'; } else toGuided(); fill(); } catch (e) { toast(e.message); } });
-  $('new-btn').addEventListener('click', () => { if (!replaceAllowed()) return; state = blank(); resources = []; pendingResources = []; restored = false; fill(); showStep(1); });
+  $('new-btn').addEventListener('click', () => { if (!replaceAllowed()) return; state = blank(); fit = F.initial(); resources = []; pendingResources = []; restored = false; fill(); showStep(1); });
   $('example-btn').addEventListener('click', () => {
     if (!replaceAllowed()) return;
     const example = window.SkillExamples[$('example-select').value];
@@ -136,14 +154,15 @@
     const file = $('import-file').files[0]; $('import-file').value = ''; if (!file) return;
     try {
       if (file.size > 30 * 1024 * 1024) throw Error('El archivo supera 30 MB.');
-      const text = await file.text(); let next, nextResources = [], missing = [];
+      const text = await file.text(); let next, nextResources = [], missing = [], nextFit = fit;
       if (file.name.toLowerCase().endsWith('.json')) {
         const project = JSON.parse(text); if (project.version !== 1 || project.app !== 'skill-lab') throw Error('No es un proyecto de Skill Lab versión 1.');
         next = hydrate(project.state); nextResources = readResources(project.resources || []);
+        nextFit = F.restore(project.fit);
         missing = Array.isArray(project.pendingResources) ? project.pendingResources.filter(p => C.validPath(p)) : [];
       } else next = imported(text);
       if (!replaceAllowed()) return;
-      state = next; resources = nextResources; pendingResources = missing; restored = false; fill(); showStep(2);
+      state = next; fit = nextFit; resources = nextResources; pendingResources = missing; restored = false; fill(); showStep(2);
       toast('Archivo importado. El contenido se conserva como texto; los recursos no se ejecutan.');
     } catch (error) { toast(error.message); }
   });
@@ -188,7 +207,7 @@
     $('test-fields').append(div);
     ['prompt', 'expected', 'observed', 'status'].forEach(k => $('test-' + i + '-' + k).addEventListener('input', () => { state.tests[i][k] = $('test-' + i + '-' + k).value; render(); }));
   });
-  $('save-project').addEventListener('click', () => { const data = { app: 'skill-lab', version: 1, state, resources: resources.map(r => ({ path: r.path, data: bytesToBase64(r.bytes) })), pendingResources }; download(JSON.stringify(data, null, 2), (C.slug(state.name) || 'borrador') + '.skill-lab.json', 'application/json'); toast('Proyecto guardado: incluye los recursos adjuntos y el estado de las pruebas.'); });
+  $('save-project').addEventListener('click', () => { const data = { app: 'skill-lab', version: 1, state, fit, resources: resources.map(r => ({ path: r.path, data: bytesToBase64(r.bytes) })), pendingResources }; download(JSON.stringify(data, null, 2), (C.slug(state.name) || 'borrador') + '.skill-lab.json', 'application/json'); toast('Proyecto guardado: incluye el test previo, los recursos adjuntos y el estado de las pruebas.'); });
   $('zip-btn').addEventListener('click', () => { try { download(C.zip(state.name.trim(), checkedFiles()), state.name.trim() + '.zip', 'application/zip'); toast('ZIP preparado con una única carpeta raíz. No se ha instalado la skill.'); } catch (e) { toast(e.message); } });
   $('md-btn').addEventListener('click', () => { try { checkedFiles(); download(C.markdown(state), 'SKILL.md', 'text/markdown;charset=utf-8'); } catch (e) { toast(e.message); } });
   $('folder-btn').addEventListener('click', async () => {
@@ -214,7 +233,40 @@
   $('help-btn').addEventListener('click', () => $('help-dialog').showModal()); $('close-help').addEventListener('click', () => $('help-dialog').close());
   try {
     const draft = JSON.parse(localStorage.getItem(KEY) || 'null');
-    if (draft && draft.version === 1) { state = hydrate(draft.state); pendingResources = Array.isArray(draft.pendingResources) ? draft.pendingResources.filter(p => C.validPath(p)) : []; restored = true; }
+    if (draft && draft.version === 1) { state = hydrate(draft.state); fit = F.restore(draft.fit); pendingResources = Array.isArray(draft.pendingResources) ? draft.pendingResources.filter(p => C.validPath(p)) : []; restored = true; }
   } catch { /* A blocked or invalid draft must not prevent editing. */ }
+  F.questions.forEach((question, i) => {
+    const fieldset = document.createElement('fieldset'); fieldset.className = 'fit-question';
+    const legend = document.createElement('legend'); legend.textContent = (i === 5 ? 'Requisito · ' : (i + 1) + ' · ') + question; legend.id = 'fit-question-' + i; legend.tabIndex = -1;
+    const options = document.createElement('div'); options.className = 'fit-options';
+    ['yes', 'no'].forEach(value => {
+      const label = document.createElement('label'); label.className = 'fit-answer';
+      const radio = document.createElement('input'); radio.type = 'radio'; radio.name = 'fit-' + i; radio.value = value;
+      label.append(radio, document.createTextNode(value === 'yes' ? 'Sí' : 'No')); options.append(label);
+      radio.addEventListener('change', () => { fit.answers[i] = value; fit.example = false; renderFit(); saveDraft(); });
+    });
+    fieldset.append(legend, options); $('fit-question-list').append(fieldset);
+  });
+  $('fit-task').addEventListener('input', () => { fit.task = $('fit-task').value; fit.example = false; renderFit(); saveDraft(); });
+  $('fit-example-select').addEventListener('change', () => {
+    fit = F.initial(); fit.selection = $('fit-example-select').value;
+    if (fit.selection) fit.task = F.examples[fit.selection].task;
+    renderFit(); saveDraft();
+  });
+  $('fit-solve-btn').addEventListener('click', () => {
+    const example = F.examples[fit.selection]; if (!example) return;
+    fit.task = example.task; fit.answers = [...example.answers]; fit.example = true; renderFit(); saveDraft();
+  });
+  $('fit-reset-btn').addEventListener('click', () => { fit.answers = Array(6).fill(null); fit.example = false; renderFit(); saveDraft(); });
+  $('fit-next-btn').addEventListener('click', () => {
+    const result = F.evaluate(fit); if (!result.ready) return;
+    if (result.type === 'skill') {
+      const copied = state.mode === 'guided' && !state.task.trim();
+      if (copied) state.task = fit.task.trim();
+      fill(); showStep(1); $('name').focus({ preventScroll: true });
+      toast(copied ? 'Tarea copiada al editor. Ahora elija nombre y descripción.' : 'Se conserva el borrador que ya tenía. Puede seguir editándolo.');
+    } else if (result.type === 'review') $('fit-question-5').focus();
+    else { $('fit-task').focus(); $('fit-task').select(); }
+  });
   fill(); showStep(1, false);
 })();
