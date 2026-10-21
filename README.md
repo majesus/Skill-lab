@@ -1,5 +1,7 @@
 # Skill Lab
 
+**Aviso de integridad académica.** Skill Lab y las skills que prepara asisten el trabajo del investigador; no sustituyen su criterio ni asumen autoría. Toda salida de un asistente que utilice estas skills requiere verificación humana contra las fuentes originales. El uso de IA generativa debe declararse según exijan la institución y la revista. Los análisis bibliométricos de los ejemplos son descriptivos o exploratorios, no confirmatorios; superar las comprobaciones del editor no valida científicamente una skill. Las exportaciones de bases de datos con licencia (Web of Science, Scopus) se rigen por sus términos. El [aviso completo](skills/INTEGRIDAD_ACADEMICA.md) toma como referencia el Código Europeo de Conducta para la Integridad en la Investigación (ALLEA, 2023), las directrices de la Comisión Europea sobre IA generativa en investigación, el Reglamento (UE) 2024/1689 y el RGPD, según su aplicación al uso concreto.
+
 Editor local para convertir una tarea que se repite en una skill clara, comprobar su estructura y descargarla con el nombre de carpeta correcto. Está pensado para el taller de bibliometría y utiliza las seis partes de sus diapositivas.
 
 **No necesita instalar Python, GLiNER, Node ni ningún servicio de IA. No requiere claves de API.** Descargue el repositorio completo, extraiga el ZIP y abra `index.html`. Mantenga los archivos de la aplicación juntos.
